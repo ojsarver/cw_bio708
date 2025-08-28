@@ -62,3 +62,33 @@ iris_l<-iris_W %>%
   pivot_longer(cols=c("setosa", "versicolor","virginica"),
                names_to="Species",
                values_to="Sepal.Length")
+
+### join() function
+
+# matching by a single column
+## left join by "Species": one to one
+df1 <- tibble(Species = c("A", "B", "C"),
+              x = c(1, 2, 3))
+
+df2 <- tibble(Species = c("A", "B", "C"),
+              y = c(4, 5, 6))
+###left_join() merge data frames based on column(s)
+df12<-left_join(x = df1,
+          y = df2,
+          by = "Species")
+
+#what happens if df2 doesn't contain species B?
+
+df_minus_B<-tibble("Species"=c("A","C"),
+                   y=c(4,6))
+            
+left_join(x = df1,
+          y = df_minus_B,
+          by = "Species") 
+
+left_join(x = df_minus_B,
+          y = df1,
+          by = "Species") 
+
+#additional resources
+
