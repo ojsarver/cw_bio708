@@ -47,3 +47,18 @@ iris_w <- iris %>%
 print(iris_w)
 
 #pivot wider () reshape a data frame to a wide format
+
+iris_W<-iris_sub %>% 
+  mutate(id = rep(1:3, 3)) %>% # add an ID column
+  select(id, Sepal.Length, Species) %>%
+  pivot_wider(id_cols = "id", # unique row ID based on
+              values_from = "Sepal.Length", # values in each cell from
+              names_from = "Species") # new column names from
+
+rm(iris_w)
+
+#pivot_longer () to reshape to long format
+iris_l<-iris_W %>%
+  pivot_longer(cols=c("setosa", "versicolor","virginica"),
+               names_to="Species",
+               values_to="Sepal.Length")
