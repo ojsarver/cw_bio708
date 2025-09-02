@@ -45,3 +45,98 @@ df_master <- iris_sub %>%
 df_means<-iris_sub %>% 
   group_by(Species) %>% 
   summarize(mu_pw = mean(Petal.Width))
+
+
+# ggplot ------------------------------------------------------------------
+#basic syntax
+##w/o pipe
+g_example<-ggplot(data=iris,
+       mapping=aes(x=Sepal.Length,
+                   y=Sepal.Width)) + geom_point()
+##W/ pipe
+g_example<-iris %>%
+  ggplot(mapping=aes(x=Sepal.Length,
+                     y=Sepal.Width)) + 
+           geom_point()
+
+#color
+
+iris %>%
+  ggplot(mapping=aes(x=Sepal.Length,
+                     y=Sepal.Width, color=Species)) + 
+  geom_point()
+
+#color by category, aka species, has to be in the aes parentheses otherwise wont work
+
+iris %>%
+  ggplot(mapping=aes(x=Sepal.Length,
+                     y=Sepal.Width), color=Species) + 
+  geom_point()
+
+#to give uniform color put exact color in geom function
+g_scol<-iris %>%
+  ggplot(mapping=aes(x=Sepal.Length,
+                     y=Sepal.Width)) + 
+  geom_point(color="salmon")
+
+##line plot
+# sample data
+df0 <- tibble(x = rep(1:50, 3),
+              y = x * 2)
+
+# basic plot
+df0 %>% 
+  ggplot(aes(x = x,
+             y = y)) +
+  geom_line()
+
+##histogram
+# basic plot; bins = 30 by default
+iris %>% 
+  ggplot(aes(x = Sepal.Length)) +
+  geom_histogram()
+
+#exerise 5
+#create histogram colored by Species
+iris %>%
+  ggplot(mapping=aes(x=Sepal.Length,
+                     color=Species)) + 
+  geom_histogram()
+#changes color of the borders, to fill borders use fill instead of color
+iris %>%
+  ggplot(mapping=aes(x=Sepal.Length,
+                     fill=Species)) + 
+  geom_histogram()
+
+##boxplot
+# basic plot
+iris %>% 
+  ggplot(aes(x = Species,
+             y = Sepal.Length)) +
+  geom_boxplot()
+
+#exercise 6 
+#create boxplot filled by Species
+
+iris %>% 
+  ggplot(aes(x = Species,
+             y = Sepal.Length,
+             fill=Species)) +
+  geom_boxplot()
+
+#use multiple layers
+
+iris %>% 
+  ggplot(aes(x = Species,
+             y = Sepal.Length,
+             fill=Species)) +
+  geom_boxplot() +
+  geom_point()
+
+iris %>% 
+  ggplot(aes(x = Species,
+             y = Sepal.Length,
+             fill=Species)) +
+  geom_boxplot() +
+  geom_jitter(alpha=.2)
+#alpha controls transparency of points 1=full color 0=invisible
