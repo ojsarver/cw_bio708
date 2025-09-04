@@ -8,13 +8,16 @@ v_three<-c(1, 10, 100)
 
 # 2: Create a vector containing 20 "a", 30 "b", and 50 "c" (total length = 100).  
 # Assign it to `v_abc100`.
-v_abc100<-c(a=20,b=30,c=50)
-v_abc100
+
+v_abc100<-c(rep("a", 20),rep("b", 30),rep("c", 50))
 
 # 3: The script below creates a vector `v_x` with 100 random numbers from a normal distribution.  
 # Select only the positive numbers (> 0) from `v_x`, calculate their mean, and assign it to `mu_x_plus`.
 set.seed(100)
 v_x <- rnorm(100)
+
+mu_x_plus<-mean(v_x[v_x  > 0])
+mu_x_plus
 
 # 4: Create a numeric matrix with the numbers 1 through 9 arranged in 3 rows × 3 columns.  
 # Assign it to `m_num`.
@@ -23,6 +26,8 @@ m_num
 # 5: Create a base R data frame (`data.frame()` function) using `v_x` and `v_abc100`.  
 # Name the columns `"x"` for `v_x` and `"group"` for `v_abc`, and assign it to `df_sample`.
 
+df_sample<-data.frame(v_x,v_abc100)
+names(df_sample)<-c("x","group")
 
 # tidyverse ---------------------------------------------------------------
 
@@ -88,15 +93,32 @@ n_make
 # 14: Convert the `cyl` column from numeric to factor using `factor()`.  
 # Add it to `df_mtcars` as a new column named `f_cyl` using `mutate()` function.
 
-factor(df_mtcars, c(cyl))
+df_mtcars <- mutate(df_mtcars, f_cyl = factor(cyl))
 
 # 15: Draw a box plot showing car weight (`wt`) for each number of cylinders (`f_cyl`).
 
+df_mtcars %>% 
+  ggplot(aes(x = f_cyl,
+             y = wt)) +
+  geom_boxplot()
+
 # 16: Calculate the average car weight (`wt`) separately for each number of cylinders (`cyl`).
+
+df_mtcars %>% 
+  group_by(cyl) %>% 
+  summarize(mu_wt = mean(wt))
 
 # 17: Identify the heaviest car make (`wt`) among cars with 6 cylinders (`cyl`).
 
+df_mtcars %>%
+  filter(cyl==6)%>%
+  arrange(desc(wt))
+
 # 18: Create a histogram showing the distribution of 1/4 mile time (`qsec`).
+
+df_mtcars %>% 
+  ggplot(aes(x = qsec)) +
+  geom_histogram()
 
 # 19: The following script creates two tibbles:  
 # `df_length` (body length) and `df_weight` (body weight),  
@@ -108,7 +130,7 @@ v_l <- runif(150, 60, 150)
 v_w <- rnorm(n = length(v_l),
              mean = 0.1 * v_l^1.5,
              sd = 10)
-V_sp<-sample(c("bhc", "rbs", "gsf"),
+v_sp<-sample(c("bhc", "rbs", "gsf"),
              size = length(v_l),
              replace = TRUE)
 
@@ -118,5 +140,16 @@ df_length <- tibble(length = v_l,
 df_weight <- tibble(weight = v_w,
                     sp_code = v_sp)
 
+df_fish<-left_join(x = df_length,
+          y = df_weight,
+          by = "sp_code")
+
+
 # 20: Draw a scatter plot (point plot) of `length` vs. `weight` from `df_fish`,  
 # coloring the points by species code (`sp_code`).
+
+df_fish %>% 
+  ggplot(aes(x = length,
+             y = weight,
+             color=sp_code)) +
+  geom_point()
