@@ -2,7 +2,7 @@
 
 # load csv data
 library(tidyverse)
-df_h0 <- read_csv("data_raw/data_plant_height.csv")
+df_h0 <- read_csv(here::here("data_raw/data_plant_height.csv"))
 
 df_h0 %>% 
   ggplot(aes(x = height)) + 
@@ -72,7 +72,7 @@ df_h0 %>%
 
 # 9.2 poisson distribution ------------------------------------------------
 
-df_count <- read_csv("data_raw/data_garden_count.csv")
+df_count <- read_csv(here::here("data_raw/data_garden_count.csv"))
 print(df_count)
 
 df_count %>% 
