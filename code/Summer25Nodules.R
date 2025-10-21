@@ -25,7 +25,8 @@ t.test(x, y, var.equal = FALSE)
 df_nod_mu <- df_nod %>% 
   group_by(Treatment) %>% # group operation
   summarize(mu_n = mean(Nodules),
-            sd_n = sd(Nodules))
+            sd_n = sd(Nodules),
+            N_n = length(Nodules))
 
 Legend=c("Control","Microplastic")
 
@@ -35,5 +36,8 @@ df_nod_mu %>%
   geom_bar(stat="identity")+
   scale_fill_manual("Legend", values = c("Control" = "lightblue2",
                                          "Microplastic" = "green4"))+
+  geom_errorbar(aes(ymin=mu_n-(sd_n/sqrt(N_n)), 
+                    ymax=mu_n+(sd_n/sqrt(N_n)), 
+                    width=0.2))+
   labs(x = "Treatment",
        y = "Average Number of Nodules")

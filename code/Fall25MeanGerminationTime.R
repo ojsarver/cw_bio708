@@ -25,7 +25,8 @@ t.test(x, y, var.equal = FALSE)
 df_MGT_mu <- df_MGT %>% 
   group_by(Treatment) %>% # group operation
   summarize(mu_l = mean(DTG),
-            sd_l = sd(DTG))
+            sd_l = sd(DTG),
+            N_l = length(DTG))
 
 Legend=c("Control","Microplastic")
 
@@ -33,6 +34,10 @@ df_MGT_mu %>%
   ggplot(aes(x=Treatment,
              y=mu_l, fill=Legend))+
   geom_bar(stat="identity")+
-  scale_fill_manual("Legend", values = c("Control" = "gold", "Microplastic" = "deeppink3"))+
+  scale_fill_manual("Legend", values = c("Control" = "gold",
+                                         "Microplastic" = "deeppink3"))+
+  geom_errorbar(aes(ymin=mu_l-(sd_l/sqrt(N_l)), 
+                    ymax=mu_l+(sd_l/sqrt(N_l)), 
+                    width=0.2))+
   labs(x = "Treatment",
        y = "Mean Germination Time in Days")
