@@ -24,3 +24,16 @@ ggplot(data=df_growth,aes(x=GrowthStage,
                            y=Weeks_to),color="pink")+
   geom_point(data=df_mp,aes(x=GrowthStage,
                           y=Weeks_to),color="lightblue")
+
+#if we add geom_line()
+
+ggplot(data=df_growth,aes(x=GrowthStage,
+                          y=Weeks_to))+
+  geom_point(data=df_c,aes(x=GrowthStage,
+                           y=Weeks_to),color="pink")+
+  geom_line(data=df_c,aes(x=GrowthStage,
+                           y=Weeks_to),color="pink4")+
+  geom_point(data=df_mp,aes(x=GrowthStage,
+                            y=Weeks_to),color="lightblue")+
+  geom_line(data=df_mp,aes(x=GrowthStage,
+                            y=Weeks_to),color="lightblue4")
