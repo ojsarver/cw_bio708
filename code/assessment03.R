@@ -42,7 +42,10 @@ df_co2%>%
   ggplot(aes(x=conc,
              y=uptake,
              color=treatment))+
+  facet_wrap(vars(type))+
   geom_point()
+
+?facet_wrap()
 
 # Q4
 # The df_co2 dataset contains the following variables:
@@ -77,10 +80,10 @@ summary(lm(uptake~treatment,
 summary(lm(uptake~treatment,
    data=y))
 
-summary(lm(uptake~conc+treatment,
+summary(lm(uptake~conc*treatment,
     data=x))
 
-summary(lm(uptake~conc+treatment,
+summary(lm(uptake~conc*treatment,
    data=y))
 
 # Q5
@@ -180,13 +183,22 @@ df_env_sub<-df_env%>%
 # - p: proportion of the most abundant species (n1 / n_sum)
 # Assign the resulting dataframe to df_n
 
-#i would like guidance on how to complete this question
+df_n <- df_bci %>% 
+  group_by(plot) %>% 
+  summarize(n1 = max(count),
+            n_sum = sum(count),
+            p = n1 / n_sum)
+
+#this seems simple now. I think I forgot the summarize function when I was
+#testing solutions. Thank you
 
 # Q9
 # Combine the summary data (`df_n`) with the environmental variables
 # (`df_env_sub`) for each plot. Assign the resulting dataframe to `df_m`.
 
-#cannot do this until question 8 is done
+df_m<-df_env%>%
+  left_join(df_n,
+            by="plot")
 
 # Q10
 # Develop a statistical model to explain variation in the proportion of the dominant
@@ -196,4 +208,17 @@ df_env_sub<-df_env%>%
 # rather than the goodness of fit, and report which variables are included in 
 # the best predictive model as a comment.
 
-#cannot do this until question 8/9 is done
+uh<-glm(cbind(n1,n_sum-n1) ~ envhet+stream+habitat,
+          data=df_m,
+          family="binomial")
+
+
+options(na.action="na.fail")
+
+library(MuMIn)
+que<-dredge(uh,rank="AIC")
+subset(que,delta< 2)
+
+#The one with the lower AIC has a value of -.3157 for envhet and a plus sign for
+#habitat. Stream has no plus sign or number associated with it. I presume this
+#means that envhet and habitat are the best predictors
