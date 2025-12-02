@@ -5,7 +5,7 @@ pacman::p_load(tidyverse,
                here,
                ggplot2)
 
-df_growth <- read_csv(here("data_raw/summergrowth.csv"))
+df_growth <- read_csv(here("data_raw/summergrowth_noV_csv.csv"))
 
 df_growth<-na.omit(df_growth)
 
@@ -16,6 +16,18 @@ df_c<-df_growth%>%
 
 df_mp<-df_growth%>%
   filter(Treatment=="MP")
+
+#elise code
+
+df_growth %>%
+  
+  ggplot(aes(x=as.numeric(as.factor(GrowthStage)), y=Weeks_to, color = Treatment))+
+  
+  geom_point()+
+  
+  geom_smooth(method =lm, formula = y~x)+
+  labs(x="Growth Stage",
+       y="Time to reach designated growth stage")
   
   
 ggplot(data=df_growth,aes(x=GrowthStage,
